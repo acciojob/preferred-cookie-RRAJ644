@@ -1,5 +1,5 @@
 // Ensure the DOM is fully loaded before executing the script
-window.onload = function () {
+document.addEventListener("DOMContentLoaded", function () {
   // Function to set cookies with a given name, value, and expiration time
   function setCookie(name, value, days) {
     const date = new Date();
@@ -38,21 +38,24 @@ window.onload = function () {
   }
 
   // Handle form submission
-  document.getElementById("customize-form").addEventListener("submit", function (event) {
-    event.preventDefault(); // Prevent form submission
+  const form = document.getElementById("customize-form");
+  if (form) {
+    form.addEventListener("submit", function (event) {
+      event.preventDefault(); // Prevent form submission
 
-    const fontSize = document.getElementById("fontsize").value;
-    const fontColor = document.getElementById("fontcolor").value;
+      const fontSize = document.getElementById("fontsize").value;
+      const fontColor = document.getElementById("fontcolor").value;
 
-    // Save the preferences in cookies
-    setCookie("fontsize", fontSize, 7); // Save for 7 days
-    setCookie("fontcolor", fontColor, 7); // Save for 7 days
+      // Save the preferences in cookies
+      setCookie("fontsize", fontSize, 7); // Save for 7 days
+      setCookie("fontcolor", fontColor, 7); // Save for 7 days
 
-    // Apply the preferences immediately
-    document.documentElement.style.setProperty('--fontsize', fontSize + "px");
-    document.documentElement.style.setProperty('--fontcolor', fontColor);
-  });
+      // Apply the preferences immediately
+      document.documentElement.style.setProperty('--fontsize', fontSize + "px");
+      document.documentElement.style.setProperty('--fontcolor', fontColor);
+    });
+  }
 
   // Apply preferences on page load
   applyPreferences();
-};
+});

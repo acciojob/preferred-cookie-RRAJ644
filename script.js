@@ -1,41 +1,46 @@
-let submitbtn = document.querySelector('[type="submit"]');
+document.addEventListener("DOMContentLoaded", function() {
+  let fontSize = document.querySelector("#fontsize");
+  let fontColor = document.querySelector("#fontcolor");
+  let submitButton = document.querySelector("input[type='submit']");
 
-submitbtn.addEventListener('click', savefunc);
-
-function savefunc(event) {
-  event.preventDefault();
-  let fontsize = document.getElementById('fontsize').value;
-  let fontcolor = document.getElementById('fontcolor').value;
-
-  // Save cookies
-  document.cookie = 'fontsize=' + fontsize + ';' + 'max-age=10000000;';
-  document.cookie = 'fontcolor=' + fontcolor + ';' + 'max-age=10000000;';
-
-  if (document.cookie !== '') {
-    console.log("Cookies saved");
-
-    let cookies = document.cookie.split(';');
-    let ans = false;
-
-    // Check for saved cookies
-    for (let i = 0; i < cookies.length; i++) {
-      if (cookies[i].includes('fontsize') && cookies[i].includes('fontcolor')) {
-        ans = true;
+  function getCookie(name) {
+    let cookies = document.cookie.split("; ");
+    for (let cookie of cookies) {
+      let [cookieName, cookieValue] = cookie.split("=");
+      if (decodeURIComponent(cookieName) === name) {
+        return decodeURIComponent(cookieValue);
       }
     }
+    return null;
+  }
 
-    if (ans) {
-      console.log("Applying styles from cookies");
+  function setCookie(name, value) {
+    document.cookie = `${encodeURIComponent(name)}=${encodeURIComponent(value)};path=/`;
+  }
 
-      // Set CSS variables on the root element
-      document.documentElement.style.setProperty('--fontsize', fontsize + "px");
-      document.documentElement.style.setProperty('--fontcolor', fontcolor);
+  function applyPreferences() {
+    let getDefaultFontSize = getCookie("fontsize");
+    let getDefaultColor = getCookie("fontcolor");
 
-      // Apply styles to body or specific elements
-      document.body.style.fontSize = fontsize + "px";
-      document.body.style.color = fontcolor;
-
-      console.log("Document styles updated");
+    if (getDefaultFontSize) {
+      fontSize.value = getDefaultFontSize;
+      document.documentElement.style.setProperty("--fontsize", getDefaultFontSize + "px");
+    }
+    if (getDefaultColor) {
+      fontColor.value = getDefaultColor;
+      document.documentElement.style.setProperty("--fontcolor", getDefaultColor);
     }
   }
-}
+
+  window.onload = applyPreferences;
+
+  submitButton.addEventListener("click", (e) => {
+    e.preventDefault();
+    let v_font = fontSize.value;
+    let v_color = fontColor.value;
+    setCookie("fontsize", v_font);
+    setCookie("fontcolor", v_color);
+    document.documentElement.style.setProperty("--fontsize", v_font + "px");
+    document.documentElement.style.setProperty("--fontcolor", v_color);
+  });
+});

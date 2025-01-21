@@ -1,33 +1,33 @@
 //your JS code here. If required.
-let saveInput = document.querySelector('input[type="submit"]')
-saveInput.addEventListener("click",()=>{
-	let fontSize = document.querySelector('#fontsize').value
-	let fontColor = document.querySelector('input[type="color"]').value
-	// console.log(fontSize,fontColor)
-	document.cookie = "fontcolor="+fontColor+"; expires= Fri, 25 June 2023 12:00:00 UTC; path=/";
-	document.cookie = "fontsize="+fontSize+"; expires= Fri, 25 June 2023 12:00:00 UTC; path=/";
-}) 
+const fontSize = getCookie("fontSize");
+    const color = getCookie("color");
+    if (fontSize) {
+      document.body.style.fontSize = fontSize;
+      document.getElementById("fontsize").value = fontSize;
+    }
+    if (color) {
+      document.body.style.color = color;
+      document.getElementById("color").value = color;
+    }
 
-function showCookieValue(){
-let fontSizeCookie = getCookie("fontsize")
-	if(fontSizeCookie){
-		document.querySelector('#fontsize').value = fontSizeCookie 
-	}
-	let fontColorCookie =getCookie("fontcolor")
-	if(fontColorCookie){
-		document.querySelector('input[type="color"]').value = fontColorCookie 
-	}
+    // Function to set user's preferences as cookies
+    function setPreferences() {
+      const fontSize = document.getElementById("fontsize").value + "px";
+      const color = document.getElementById("color").value;
+      document.body.style.fontSize = fontSize;
+      document.body.style.color = color;
+      document.cookie = "fontSize=" + fontSize + "; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/";
+      document.cookie = "color=" + color + "; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/";
+    }
 
-	
-}
-
-function getCookie(key){
-	let cookies =  document.cookie.split("; ")
-	 .find((row) => row.startsWith(key))
-	if(cookies){
-		return cookies.split("=")[1]
-	}else{
-		return undefined
-	}
-	
-}
+    // Function to retrieve a cookie by name
+    function getCookie(name) {
+      const cookies = document.cookie.split("; ");
+      for (let i = 0; i < cookies.length; i++) {
+        const parts = cookies[i].split("=");
+        if (parts[0] === name) {
+          return parts[1];
+        }
+      }
+      return null;
+    }

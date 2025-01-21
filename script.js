@@ -1,61 +1,33 @@
-// Ensure the DOM is fully loaded before executing the script
-document.addEventListener("DOMContentLoaded", function () {
-  // Function to set cookies with a given name, value, and expiration time
-  function setCookie(name, value, days) {
-    const date = new Date();
-    date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
-    const expires = `expires=${date.toUTCString()}`;
-    document.cookie = `${name}=${value}; ${expires}; path=/`;
-  }
+//your JS code here. If required.
+let saveInput = document.querySelector('input[type="submit"]')
+saveInput.addEventListener("click",()=>{
+	let fontSize = document.querySelector('#fontsize').value
+	let fontColor = document.querySelector('input[type="color"]').value
+	// console.log(fontSize,fontColor)
+	document.cookie = "fontcolor="+fontColor+"; expires= Fri, 25 June 2023 12:00:00 UTC; path=/";
+	document.cookie = "fontsize="+fontSize+"; expires= Fri, 25 June 2023 12:00:00 UTC; path=/";
+}) 
 
-  // Function to get the cookie value by name
-  function getCookie(name) {
-    const nameEq = `${name}=`;
-    const cookies = document.cookie.split(';');
-    for (let i = 0; i < cookies.length; i++) {
-      let c = cookies[i].trim();
-      if (c.indexOf(nameEq) === 0) {
-        return c.substring(nameEq.length, c.length);
-      }
-    }
-    return "";
-  }
+function showCookieValue(){
+let fontSizeCookie = getCookie("fontsize")
+	if(fontSizeCookie){
+		document.querySelector('#fontsize').value = fontSizeCookie 
+	}
+	let fontColorCookie =getCookie("fontcolor")
+	if(fontColorCookie){
+		document.querySelector('input[type="color"]').value = fontColorCookie 
+	}
 
-  // Apply saved preferences if cookies exist
-  function applyPreferences() {
-    const fontSize = getCookie("fontsize");
-    const fontColor = getCookie("fontcolor");
+	
+}
 
-    if (fontSize) {
-      document.documentElement.style.setProperty('--fontsize', fontSize + "px");
-      document.getElementById("fontsize").value = fontSize; // Update input field
-    }
-
-    if (fontColor) {
-      document.documentElement.style.setProperty('--fontcolor', fontColor);
-      document.getElementById("fontcolor").value = fontColor; // Update input field
-    }
-  }
-
-  // Handle form submission
-  const form = document.getElementById("customize-form");
-  if (form) {
-    form.addEventListener("submit", function (event) {
-      event.preventDefault(); // Prevent form submission
-
-      const fontSize = document.getElementById("fontsize").value;
-      const fontColor = document.getElementById("fontcolor").value;
-
-      // Save the preferences in cookies
-      setCookie("fontsize", fontSize, 7); // Save for 7 days
-      setCookie("fontcolor", fontColor, 7); // Save for 7 days
-
-      // Apply the preferences immediately
-      document.documentElement.style.setProperty('--fontsize', fontSize + "px");
-      document.documentElement.style.setProperty('--fontcolor', fontColor);
-    });
-  }
-
-  // Apply preferences on page load
-  applyPreferences();
-});
+function getCookie(key){
+	let cookies =  document.cookie.split("; ")
+	 .find((row) => row.startsWith(key))
+	if(cookies){
+		return cookies.split("=")[1]
+	}else{
+		return undefined
+	}
+	
+}

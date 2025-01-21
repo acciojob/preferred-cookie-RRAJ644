@@ -1,33 +1,35 @@
 //your JS code here. If required.
-const fontSize = getCookie("fontSize");
-    const color = getCookie("color");
-    if (fontSize) {
-      document.body.style.fontSize = fontSize;
-      document.getElementById("fontsize").value = fontSize;
-    }
-    if (color) {
-      document.body.style.color = color;
-      document.getElementById("color").value = color;
-    }
+let rootelem = document.querySelector(':root');
+let submitbtn=document.querySelector('[type="submit"]');
 
-    // Function to set user's preferences as cookies
-    function setPreferences() {
-      const fontSize = document.getElementById("fontsize").value + "px";
-      const color = document.getElementById("color").value;
-      document.body.style.fontSize = fontSize;
-      document.body.style.color = color;
-      document.cookie = "fontSize=" + fontSize + "; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/";
-      document.cookie = "color=" + color + "; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/";
-    }
+submitbtn.addEventListener('click',savefunc);
 
-    // Function to retrieve a cookie by name
-    function getCookie(name) {
-      const cookies = document.cookie.split("; ");
-      for (let i = 0; i < cookies.length; i++) {
-        const parts = cookies[i].split("=");
-        if (parts[0] === name) {
-          return parts[1];
-        }
-      }
-      return null;
-    }
+function savefunc(event) {
+	event.preventDefault();
+	let fontsize=document.getElementById('fontsize').value;
+   let fontcolor=document.getElementById('fontcolor').value;
+	document.cookie='fontsize='+fontsize+';'+'max-age=10000000;';
+	document.cookie='fontcolor='+fontcolor+';'+'max-age=10000000;';
+
+	if(document.cookie!=='')
+{
+	console.log("whihier93284")
+	let cookies=document.cookie.split(';');
+	let ans=false;
+	for (let i = 0; i < cookies.length; i++) {
+
+		if (cookies[i].includes('fontsize')) {
+		  console.log(cookies[i] + "fre");
+		  ans=true;
+		}
+	}
+	if(ans)
+			{
+		console.log("whihier")
+		document.documentElement.style.setProperty('--fontsize',fontsize+"px");
+		document.documentElement.style.setProperty('--fontcolor',fontcolor);
+		console.log(document.cookie)
+	}
+}
+}
+
